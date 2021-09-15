@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"testing"
 )
 
 const TOTAL_NUMBER_OF_CARDS = 16
+const TEST_FILENAME = "_decktesting"
 
 func TestGetRandomValue(t *testing.T) {
 	v := getRandomValue(10)
@@ -45,5 +47,50 @@ func TestDeal(t *testing.T) {
 
 	if len(deck2) != expectedNumberOfCardsInDeck2 {
 		t.Errorf("Expected number of cards in deck 2 was "+fmt.Sprint(expectedNumberOfCardsInDeck2)+", obtained %v", len(deck2))
+	}
+}
+
+func TestToFile(t *testing.T) {
+	cleanUp()
+	d := newDeck()
+	d.toFile(TEST_FILENAME)
+
+	if !fileExists(TEST_FILENAME) {
+		t.Errorf("Expected file to be created " + fmt.Sprint(TEST_FILENAME) + ", and file does not exists")
+	}
+	cleanUp()
+}
+
+func TestFromFile(t *testing.T) {
+	cleanUp()
+	expectedNumberOfCards := 16
+
+	d := newDeck()
+	d.toFile(TEST_FILENAME)
+
+	nd := fromFile(TEST_FILENAME)
+	if len(nd) != expectedNumberOfCards {
+		t.Errorf("Expected number of cards was "+fmt.Sprint(expectedNumberOfCards)+", obtained %v", len(nd))
+	}
+
+	cleanUp()
+}
+
+/*
+	==========================================
+	helpers
+	==========================================
+*/
+func fileExists(filename string) bool {
+	if _, err := os.Stat(filename); err == nil {
+		return true
+	}
+	return false
+}
+
+func cleanUp() {
+	// if file exists
+	if fileExists(TEST_FILENAME) {
+		os.Remove(TEST_FILENAME)
 	}
 }
