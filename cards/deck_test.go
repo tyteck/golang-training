@@ -68,9 +68,9 @@ func TestFromFile(t *testing.T) {
 	d := newDeck()
 	d.toFile(TEST_FILENAME)
 
-	nd := fromFile(TEST_FILENAME)
-	if len(nd) != expectedNumberOfCards {
-		t.Errorf("Expected number of cards was "+fmt.Sprint(expectedNumberOfCards)+", obtained %v", len(nd))
+	anotherDeck := fromFile(TEST_FILENAME)
+	if len(anotherDeck) != expectedNumberOfCards {
+		t.Errorf("Expected number of cards was "+fmt.Sprint(expectedNumberOfCards)+", obtained %v", len(anotherDeck))
 	}
 
 	cleanUp()
